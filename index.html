@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,400,700" />
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,600,700" />
   <link rel="stylesheet" href="timestamp.css">
+  <div id="footer">(made by k)</div>
   <title>V Live Timestamp</title>
 </head>
 <body>
@@ -22,10 +23,13 @@
 
 <hr class="divider">
 
+<div id="update"><b><p>Oct. 2020 Update:</b><br/ >Web browser videos may now be followed
+  by a "/post" marker in their URLs instead of "/video." <b>Both formats are still supported</b>,
+  but embedded previews will only show up for the video extension. (Still trying to fix this >__<)</p></div>
 <div id="input-container">
   <div class="input-item">
     <label for="video" id="video-label">Video URL</label><br>
-    <input type="text" id="video" name="video" placeholder="https://www.vlive.tv/video/123"><br>
+    <input type="text" id="video" name="video" placeholder="https://www.vlive.tv/video/1234"><br>
   </div>
   <div class="input-item">
     <label for="time" id="time-label">Timestamp</label><br>
@@ -36,6 +40,13 @@
   </div>
 </div>
 
+<div id="checkbox-container">
+  <label class="check-container">Autoplay embedded preview
+  <input type="checkbox" class="autoplay">
+  <span class="checkmark"></span>
+  </label>
+</div>
+
 <div id="hide">
   <p id="watch">Result</p>
   <hr class="divider2">
@@ -44,9 +55,11 @@
     <button id="copy-button" onClick="copyText()">COPY</button>
   </div>
 
-  <div id="video-container">
-    <iframe id="embedVideo" frameborder='no' scrolling='no' marginwidth='0' marginheight='0'
-    WIDTH='544' HEIGHT='306' allowfullscreen></iframe>
+  <div id="embed">
+    <div id="video-container">
+      <iframe id="embedVideo" frameborder='no' scrolling='no' marginwidth='0' marginheight='0'
+      WIDTH='544' HEIGHT='306' allowfullscreen></iframe>
+    </div>
   </div>
 </div>
 <!--<div id="footer">made by k</div>-->
@@ -87,13 +100,23 @@ function embed() {
   var video = document.getElementById("video").value;
   var time = document.getElementById("time").value;
   var embedLink = "";
-  embedLink = video.replace("video", "embed") + "?&begin=" + toSeconds(time);
+
+  var autoplay = document.querySelector('.autoplay').checked;
+
+  if (autoplay) {
+    embedLink = video.replace("video", "embed") + "?&begin=" + toSeconds(time);
+  } else {
+    embedLink = video.replace("video", "embed") + "?autoPlay=false" + "?&begin=" + toSeconds(time);
+  }
   document.getElementById("embedVideo").src = embedLink;
 }
 
 function show() {
   if (url.includes("vlive")) {
     document.getElementById("hide").style.display = "block";
+  }
+  if (url.includes("video")) {
+    document.getElementById("embed").style.display = "block";
   }
 }
 
